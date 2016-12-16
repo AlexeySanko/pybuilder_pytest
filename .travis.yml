@@ -14,4 +14,4 @@ install:
   - pip install pybuilder
   - pyb install_dependencies --verbose
 script:
-  - pyb --verbose
+  - pyb --debug
