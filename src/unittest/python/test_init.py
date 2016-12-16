@@ -14,14 +14,12 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from os.path import join as join_path
 from pytest import fixture, raises as pytest_raises
 from sys import path as sys_path
 
 from pybuilder.core import Project
 from pybuilder.errors import BuildFailedException
-from pybuilder.reactor import Reactor
-from test_utils import Mock
+from mock import Mock
 from pybuilder_pytest import initialize_pytest_plugin, run_unit_tests
 
 
