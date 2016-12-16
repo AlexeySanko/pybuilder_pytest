@@ -1,3 +1,6 @@
+import os
+from sys import path as sys_path
+
 from unittest import TestCase
 from pybuilder.core import Project
 from test_utils import Mock
@@ -30,10 +33,15 @@ class PytestPluginInitializationTests(TestCase):
 
 class PytestPluginRunUnitTestsTests(TestCase):
     def setUp(self):
-        self.project = Project("basedir")
         self.mock_logger = Mock()
-        self.project.set_property('dir_source_main_python', 'src')
-
-    def test_should_set_dependency(self):
+        test_dir = os.path.dirname(os.path.abspath(__file__))
+        self.project = Project(test_dir)
+        self.project.set_property('dir_source_main_python', 'resources')
         initialize_pytest_plugin(self.project)
+
+    def test_should_run_pytest_tests(self):
+        self.project.set_property('dir_source_pytest_python',
+                                  os.path.join(self.project.expand('$dir_source_main_python'), 'pytest_base_success'))
         run_unit_tests(self.project, self.mock_logger)
+        self.assertTrue(self.project.expand_path('$dir_source_main_python') in sys_path)
+        self.assertTrue(self.project.expand_path('$dir_source_pytest_python') in sys_path)
