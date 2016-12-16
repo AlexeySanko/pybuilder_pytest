@@ -14,5 +14,13 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-def test_pytest_base_success():
-    assert True
+import pytest
+
+
+def pytest_addoption(parser):
+    parser.addoption("--build-project-path", action="store", help="store build project")
+
+
+@pytest.fixture
+def build_project_path(request):
+    return request.config.getoption("--build-project-path")

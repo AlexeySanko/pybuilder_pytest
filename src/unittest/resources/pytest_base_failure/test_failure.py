@@ -14,5 +14,5 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-def test_pytest_base_success():
-    assert True
+def test_pytest_base_failure():
+    assert False

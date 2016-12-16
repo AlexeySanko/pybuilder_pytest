@@ -21,7 +21,6 @@ from pybuilder.errors import BuildFailedException
 
 __author__ = 'Alexey Sanko'
 
-
 use_plugin("python.core")
 
 
@@ -34,6 +33,10 @@ def initialize_pytest_plugin(project):
 
 @task
 def run_unit_tests(project, logger):
+    call_pytest(project, logger)
+
+
+def call_pytest(project, logger, args=None):
     """ Call pytest for the sources of the given project. """
     import pytest
 
@@ -43,11 +46,11 @@ def run_unit_tests(project, logger):
         as push_test_path_to_syspath
     test_dir = push_test_path_to_syspath(project, sys_path, 'pytest')
     try:
-        args = [test_dir]
+        pytest_args = [test_dir] + args if args else [test_dir]
         if project.get_property('verbose'):
-            args.append('-s')
-            args.append('-v')
-        ret = pytest.main(args)
+            pytest_args.append('-s')
+            pytest_args.append('-v')
+        ret = pytest.main(pytest_args)
         if ret:
             raise BuildFailedException('pytest: unittests failed')
         else:
