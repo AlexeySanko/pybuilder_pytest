@@ -14,6 +14,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from sys import path as sys_path
+
 from pybuilder.core import Author, init, use_plugin, task
 
 use_plugin("python.core")
@@ -65,6 +67,10 @@ def set_properties(project):
 # "Eating your own dog food"
 @task
 def run_unit_tests(project, logger):
+    import imp
+    module_found = imp.find_module('pybuilder_pytest', [project.expand_path('$dir_source_main_python')])
+    pybuilder_pytest = imp.load_module('pybuilder_pytest', *module_found)
+
     from pybuilder_pytest import call_pytest, initialize_pytest_plugin
     initialize_pytest_plugin(project)
     call_pytest(project, logger, ['--build-project-path', project.get_property('basedir')])
