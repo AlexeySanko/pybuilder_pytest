@@ -9,7 +9,7 @@ use_plugin("python.distutils")
 
 
 name = "pybuilder-pytest"
-default_task = "publish"
+default_task = ['clean', 'analyze', 'publish']
 
 
 @init
