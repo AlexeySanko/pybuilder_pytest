@@ -23,6 +23,7 @@ use_plugin("python.install_dependencies")
 use_plugin("python.flake8")
 use_plugin("python.coverage")
 use_plugin("python.distutils")
+use_plugin("python.unittest")
 
 
 name = "pybuilder-pytest"
@@ -62,15 +63,3 @@ def set_properties(project):
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5'])
-
-
-# "Eating your own dog food"
-@task
-def run_unit_tests(project, logger):
-    import imp
-    module_found = imp.find_module('pybuilder_pytest', [project.expand_path('$dir_source_main_python')])
-    pybuilder_pytest = imp.load_module('pybuilder_pytest', *module_found)
-
-    from pybuilder_pytest import call_pytest, initialize_pytest_plugin
-    initialize_pytest_plugin(project)
-    call_pytest(project, logger, ['--build-project-path', project.get_property('basedir')])
