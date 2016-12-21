@@ -53,7 +53,6 @@ def initialize_pytest_plugin(project):
 @task
 def run_unit_tests(project, logger):
     """ Call pytest for the sources of the given project. """
-    print "$$$$$$$$$$$$$$$$$$: " + project.expand_path('$dir_source_pytest_python')
     logger.info("pytest: Run unittests.")
     # Add test and source folders to syspath
     from pybuilder.plugins.python.unittest_plugin \
@@ -68,7 +67,6 @@ def run_unit_tests(project, logger):
         sorted(project.get_property('pytest_class_globs')) != sorted(DEFAULT_PYTEST_CLASS_GLOBS)
         ]
     ):
-        test_dir = project.expand_path('$dir_source_pytest_python')
         pytest_ini = path_join(test_dir, 'pytest.ini')
         if isfile(pytest_ini):
             raise BuildFailedException(
@@ -84,6 +82,7 @@ def run_unit_tests(project, logger):
         f.write(content)
         f.flush()
         f.close()
+    print "$$$$$$$$$$$$$$$$$$: " + test_dir
     try:
         pytest_args = [test_dir] + project.get_property('pytest_extra_args')
         if project.get_property('verbose'):
