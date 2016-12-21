@@ -149,6 +149,7 @@ class PytestPluginRunningTests(TestCase):
             f.write(content)
             f.flush()
             f.close()
+        test_project.set_property('verbose', True)
         return test_project
 
     def read_pytest_conftest_result_file(self, dir):
