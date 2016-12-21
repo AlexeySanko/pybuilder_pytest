@@ -176,6 +176,7 @@ class PytestPluginRunningTests(TestCase):
         cfg = self.read_pytest_conftest_result_file(test_project.expand_path('$dir_source_pytest_python'))
         self.assertEqual(cfg['verbose'], '0')
         self.assertEqual(cfg['capture'], 'fd')
+        self.assertEqual(len(cfg['tests_list']), 1)
 
     def test_should_run_pytest_tests_with_verbose(self):
         test_project = self.create_test_project('pytest_success_with_verbose',
@@ -186,6 +187,7 @@ class PytestPluginRunningTests(TestCase):
         cfg = self.read_pytest_conftest_result_file(test_project.expand_path('$dir_source_pytest_python'))
         self.assertEqual(cfg['verbose'], '1')
         self.assertEqual(cfg['capture'], 'no')
+        self.assertEqual(len(cfg['tests_list']), 1)
 
     def test_should_correct_get_pytest_failure(self):
         test_project = self.create_test_project('pytest_failure', {'test_failure.py': pytest_file_failure})
