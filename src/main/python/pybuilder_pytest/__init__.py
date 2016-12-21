@@ -87,7 +87,7 @@ def run_unit_tests(project, logger):
     try:
         pytest_args = [test_dir] + project.get_property('pytest_extra_args')
         if project.get_property('verbose'):
-            pytest_args.append('-s')
+            pytest_args.append('--full-trace')
             pytest_args.append('-v')
         ret = pytest_main(pytest_args)
         if ret:
