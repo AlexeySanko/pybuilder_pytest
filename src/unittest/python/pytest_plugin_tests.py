@@ -102,7 +102,7 @@ class PytestPluginRunningTests(TestCase):
         mkdir(src_dir)
         test_project.set_property('dir_source_main_python',
                                   'src')
-        for file_name, content in content_dict.iteritems():
+        for file_name, content in content_dict.items():
             f = open(path_join(tests_dir, file_name), 'w')
             f.write(content)
             f.flush()
