@@ -85,7 +85,7 @@ def pytest_collection_modifyitems(config, items):
     f.close()
 """
 
-pytest_file_sucess_with_extra_args = """
+pytest_file_success_with_extra_args = """
 def test_success_with_extra_args(test_arg):
     assert test_arg == "test_value"
 """
@@ -101,6 +101,31 @@ def test_arg(request):
     return request.config.getoption("--test-arg")
 """
 
+pytest_file_class_globs = """
+class TestSuccess():
+    def test_pytest_base_success(self):
+        assert True
+
+class CheckSuccess():
+    def test_pytest_base_success(self):
+        assert True
+
+class SuccessTest():
+    def test_pytest_base_success(self):
+        assert True
+"""
+
+pytest_file_func_globs = """
+def test_pytest_base_success():
+    assert True
+
+def pytest_base_success_test():
+    assert True
+
+def check_pytest_base_success():
+    assert True
+"""
+
 
 class PytestPluginRunningTests(TestCase):
     def setUp(self):
@@ -110,6 +135,7 @@ class PytestPluginRunningTests(TestCase):
         project_dir = path_join(self.tmp_test_folder, name)
         mkdir(project_dir)
         test_project = Project(project_dir)
+        initialize_pytest_plugin(test_project)
         tests_dir = path_join(project_dir, 'tests')
         mkdir(tests_dir)
         test_project.set_property('dir_source_pytest_python',
@@ -136,13 +162,13 @@ class PytestPluginRunningTests(TestCase):
         return out
 
     def test_should_run_pytest_tests(self):
-        test_project = self.create_test_project('pytest_sucess', {'test_success.py': pytest_file_success})
+        test_project = self.create_test_project('pytest_success', {'test_success.py': pytest_file_success})
         run_unit_tests(test_project, Mock())
         self.assertTrue(test_project.expand_path('$dir_source_main_python') in sys_path)
         self.assertTrue(test_project.expand_path('$dir_source_pytest_python') in sys_path)
 
     def test_should_run_pytest_tests_without_verbose(self):
-        test_project = self.create_test_project('pytest_sucess_without_verbose',
+        test_project = self.create_test_project('pytest_success_without_verbose',
                                                 {'test_success_without_verbose.py': pytest_file_success,
                                                  'conftest.py': pytest_conftest_result_to_file})
         run_unit_tests(test_project, Mock())
@@ -151,7 +177,7 @@ class PytestPluginRunningTests(TestCase):
         self.assertEqual(cfg['capture'], 'fd')
 
     def test_should_run_pytest_tests_with_verbose(self):
-        test_project = self.create_test_project('pytest_sucess_with_verbose',
+        test_project = self.create_test_project('pytest_success_with_verbose',
                                                 {'test_success_with_verbose.py': pytest_file_success,
                                                  'conftest.py': pytest_conftest_result_to_file})
         test_project.set_property('verbose', True)
@@ -168,15 +194,51 @@ class PytestPluginRunningTests(TestCase):
         #     run_unit_tests(test_project, Mock())
 
     def test_should_run_pytest_tests_with_extra_args(self):
-        test_project = self.create_test_project('pytest_sucess_with_extra_args',
-                                                {'test_success_with_extra_args.py': pytest_file_sucess_with_extra_args,
+        test_project = self.create_test_project('pytest_success_with_extra_args',
+                                                {'test_success_with_extra_args.py': pytest_file_success_with_extra_args,
                                                  'conftest.py': pytest_conftest_test_arg})
-        initialize_pytest_plugin(test_project)
         test_project.set_property("pytest_extra_args",
                                   test_project.get_property("pytest_extra_args")
                                   + ["--test-arg", "test_value"])
         run_unit_tests(test_project, Mock())
-        self.assertTrue(True)
+
+    def test_should_run_pytest_tests_with_module_glob(self):
+        test_project = self.create_test_project('pytest_success_with_module_glob',
+                                                {'test_success_with_module_glob.py': pytest_file_success,
+                                                 'success_with_module_glob_test.py': pytest_file_success,
+                                                 'check_success_with_module_glob.py': pytest_file_success,
+                                                 'success_with_module_glob_check.py': pytest_file_success,
+                                                 'conftest.py': pytest_conftest_result_to_file})
+        test_project.get_property("pytest_python_module_globs").append("check_*")
+        run_unit_tests(test_project, Mock())
+        cfg = self.read_pytest_conftest_result_file(test_project.expand_path('$dir_source_pytest_python'))
+        self.assertEqual(len(cfg['tests_list']), 3)
+
+    def test_should_run_pytest_tests_with_class_glob(self):
+        test_project = self.create_test_project('pytest_success_with_class_glob',
+                                                {'test_success_with_class_glob.py': pytest_file_class_globs,
+                                                 'conftest.py': pytest_conftest_result_to_file})
+        test_project.get_property("pytest_class_globs").append("Check*")
+        run_unit_tests(test_project, Mock())
+        cfg = self.read_pytest_conftest_result_file(test_project.expand_path('$dir_source_pytest_python'))
+        self.assertEqual(len(cfg['tests_list']), 2)
+
+    def test_should_run_pytest_tests_with_function_glob(self):
+        test_project = self.create_test_project('pytest_success_with_func_glob',
+                                                {'test_success_with_func_glob.py': pytest_file_func_globs,
+                                                 'conftest.py': pytest_conftest_result_to_file})
+        test_project.get_property("pytest_function_n_method_globs").append("check_*")
+        run_unit_tests(test_project, Mock())
+        cfg = self.read_pytest_conftest_result_file(test_project.expand_path('$dir_source_pytest_python'))
+        self.assertEqual(len(cfg['tests_list']), 2)
+
+    def test_should_fail_pytest_tests_with_module_glob_and_inifile(self):
+        test_project = self.create_test_project('pytest_inifile_exists',
+                                                {'test_fail_inifile_exists.py': pytest_file_success,
+                                                 'pytest.ini': pytest_file_success})
+        test_project.get_property("pytest_python_module_globs").append("check_*")
+        self.assertRaises(BuildFailedException, run_unit_tests, test_project, Mock())
+
 
     def tearDown(self):
         rmtree(self.tmp_test_folder)
