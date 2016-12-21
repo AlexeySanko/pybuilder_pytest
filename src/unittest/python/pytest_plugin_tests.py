@@ -85,6 +85,22 @@ def pytest_collection_modifyitems(config, items):
     f.close()
 """
 
+pytest_file_sucess_with_extra_args = """
+def test_success_with_extra_args(test_arg):
+    assert test_arg == "test_value"
+"""
+
+pytest_conftest_test_arg = """
+import pytest
+
+def pytest_addoption(parser):
+    parser.addoption("--test-arg", action="store")
+
+@pytest.fixture
+def test_arg(request):
+    return request.config.getoption("--test-arg")
+"""
+
 
 class PytestPluginRunningTests(TestCase):
     def setUp(self):
@@ -150,6 +166,17 @@ class PytestPluginRunningTests(TestCase):
         # has to be compatible with Python 2.6
         # with self.assertRaises(BuildFailedException) as context:
         #     run_unit_tests(test_project, Mock())
+
+    def test_should_run_pytest_tests_with_extra_args(self):
+        test_project = self.create_test_project('pytest_sucess_with_extra_args',
+                                                {'test_success_with_extra_args.py': pytest_file_sucess_with_extra_args,
+                                                 'conftest.py': pytest_conftest_test_arg})
+        initialize_pytest_plugin(test_project)
+        test_project.set_property("pytest_extra_args",
+                                  test_project.get_property("pytest_extra_args")
+                                  + ["--test-arg", "test_value"])
+        run_unit_tests(test_project, Mock())
+        self.assertTrue(True)
 
     def tearDown(self):
         rmtree(self.tmp_test_folder)
