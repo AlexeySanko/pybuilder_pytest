@@ -27,17 +27,14 @@ use_plugin("python.core")
 @init
 def initialize_pytest_plugin(project):
     """ Init default plugin project properties. """
-    project.plugin_depends_on("pytest")
+    project.plugin_depends_on('pytest')
     project.set_property_if_unset("dir_source_pytest_python", "src/unittest/python")
 
 
 @task
 def run_unit_tests(project, logger):
-    call_pytest(project, logger)
-
-
-def call_pytest(project, logger, args=None):
     """ Call pytest for the sources of the given project. """
+    args = None
     import pytest
 
     logger.info('pytest: Run unittests.')
