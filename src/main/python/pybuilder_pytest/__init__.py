@@ -89,6 +89,9 @@ def run_unit_tests(project, logger):
         f.extend(filenames)
         break
     print f
+    f = open(path_join(test_dir, 'pytest.ini'), 'r')
+    for line in f:
+        print line,
     print "$$$$$$$$$$$$$$$$$$"
     try:
         pytest_args = [test_dir] + project.get_property('pytest_extra_args')
