@@ -83,6 +83,13 @@ def run_unit_tests(project, logger):
         f.flush()
         f.close()
     print "$$$$$$$$$$$$$$$$$$: " + test_dir
+    from os import walk
+    f = []
+    for (dirpath, dirnames, filenames) in walk(test_dir):
+        f.extend(filenames)
+        break
+    print f
+    print "$$$$$$$$$$$$$$$$$$"
     try:
         pytest_args = [test_dir] + project.get_property('pytest_extra_args')
         if project.get_property('verbose'):
