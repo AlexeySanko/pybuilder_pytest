@@ -31,7 +31,7 @@ DEFAULT_PYTEST_PYTHON_MODULE_GLOBS = ["test_*", "*_test.py"]
 DEFAULT_PYTEST_FUNCTIONS_N_METHOD_GLOBS = ["test_*"]
 DEFAULT_PYTEST_CLASS_GLOBS = ["Test*"]
 
-pytest_ini_template = """
+pytest_ini_template = u"""
 [pytest]
 python_files={python_files}
 python_classes={python_classes}
@@ -79,7 +79,7 @@ def run_unit_tests(project, logger):
             python_classes=' '.join(project.get_property('pytest_class_globs')),
             python_functions=' '.join(project.get_property('pytest_function_n_method_globs'))
         )
-        f.write(content)
+        f.write(content.encode('utf8'))
         f.flush()
         f.close()
     print "$$$$$$$$$$$$$$$$$$: " + test_dir
