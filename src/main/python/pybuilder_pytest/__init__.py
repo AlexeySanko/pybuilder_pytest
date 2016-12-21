@@ -53,6 +53,7 @@ def initialize_pytest_plugin(project):
 @task
 def run_unit_tests(project, logger):
     """ Call pytest for the sources of the given project. """
+    print "$$$$$$$$$$$$$$$$$$: " + project.expand_path('$dir_source_pytest_python')
     logger.info("pytest: Run unittests.")
     # Add test and source folders to syspath
     from pybuilder.plugins.python.unittest_plugin \
