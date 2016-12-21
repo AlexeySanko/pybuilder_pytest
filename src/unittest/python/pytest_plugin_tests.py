@@ -68,7 +68,8 @@ def test_pytest_base_failure():
 """
 
 pytest_conftest_result_to_file = """
-from os.path import dirname, join as path_join
+from os.path import abspath, dirname, join as path_join
+curr_dir = dirname(abspath(__file__))
 
 def pytest_collection_modifyitems(config, items):
     verbose_flag = config.getoption('verbose')
@@ -76,7 +77,7 @@ def pytest_collection_modifyitems(config, items):
     tests_list = []
     for item in items:
         tests_list.append(item.name)
-    f = open(path_join(config.rootdir.strpath, 'pytest_collected_config.out'), 'w')
+    f = open(path_join(curr_dir, 'pytest_collected_config.out'), 'w')
     f.write(str(verbose_flag) + '\\n')
     f.write(str(capture) + '\\n')
     f.write(','.join(tests_list))
