@@ -146,8 +146,10 @@ class PytestPluginRunningTests(TestCase):
 
     def test_should_correct_get_pytest_failure(self):
         test_project = self.create_test_project('pytest_failure', {'test_failure.py': pytest_file_failure})
-        with self.assertRaises(BuildFailedException) as context:
-            run_unit_tests(test_project, Mock())
+        self.assertRaises(BuildFailedException, run_unit_tests, test_project, Mock())
+        # has to be compatible with Python 2.6
+        # with self.assertRaises(BuildFailedException) as context:
+        #     run_unit_tests(test_project, Mock())
 
     def tearDown(self):
         rmtree(self.tmp_test_folder)
