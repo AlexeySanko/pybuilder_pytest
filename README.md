@@ -15,8 +15,10 @@ Configure the plugin within your `init` function:
 ```python
 @init
 def init(project):
-    # pytest
+    # directory with unittest modules
     project.set_property("dir_source_pytest_python", "src/unittest/python")
+    # extra arguments which will be passed to pytest
+    project.get_property("pytest_extra_args").append("-x")
 ```
 
 This will break the build if any unittest failed.
