@@ -27,7 +27,7 @@ use_plugin("python.unittest")
 
 
 name = "pybuilder-pytest"
-version = '0.1.0'
+version = '0.2.0'
 authors = [Author('Alexey Sanko', 'alexeycount@gmail.com')]
 url = 'https://github.com/AlexeySanko/pybuilder_pytest'
 description = 'Please visit {0} for more information!'.format(url)
