@@ -50,6 +50,7 @@ def set_properties(project):
     project.set_property('flake8_break_build', True)
 
     # distutils
+    project.set_property('distutils_commands', ['bdist', 'bdist_wheel'])
     project.set_property('distutils_classifiers', [
         'Development Status :: 4 - Beta',
         'Environment :: Console',
