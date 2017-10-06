@@ -21,6 +21,7 @@ from pybuilder.core import Author, init, use_plugin, task
 use_plugin("python.core")
 use_plugin("python.install_dependencies")
 use_plugin("python.flake8")
+use_plugin("python.frosted")
 use_plugin("python.coverage")
 use_plugin("python.distutils")
 use_plugin("python.unittest")
@@ -48,6 +49,10 @@ def set_properties(project):
     # flake8
     project.set_property('flake8_verbose_output', True)
     project.set_property('flake8_break_build', True)
+
+    # frosted
+    project.set_property("frosted_break_build", True)
+    project.set_property("frosted_include_test_sources", True)
 
     # distutils
     project.set_property('distutils_commands', ['bdist', 'bdist_wheel'])
