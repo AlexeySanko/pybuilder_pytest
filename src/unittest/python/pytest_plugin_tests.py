@@ -16,7 +16,7 @@
 
 from os import mkdir
 from os.path import join as path_join
-from mock import Mock
+from mock import Mock, patch
 from shutil import rmtree
 from sys import path as sys_path
 from tempfile import mkdtemp
@@ -105,6 +105,22 @@ def test_arg(request):
 class PytestPluginRunningTests(TestCase):
     def setUp(self):
         self.tmp_test_folder = mkdtemp()
+        self.project = Project("basedir")
+
+    @patch("pybuilder_pytest.pytest.main", return_value=None)
+    def test_should_replace_placeholders_into_properties(self, main):
+        self.project.set_property("dir_source_pytest_python", "src/unittest/${basedir}")
+        self.project.set_property("pytest_extra_args", ['some_command', '/path/${basedir}'])
+        self.project.set_property("dir_source_main_python", '.')
+        self.project.set_property("verbose", True)
+        run_unit_tests(self.project, Mock())
+        main.assert_called_with([
+            'basedir/src/unittest/basedir',
+            'some_command',
+            '/path/basedir',
+            '-s',
+            '-v'
+        ])
 
     def create_test_project(self, name, content_dict):
         project_dir = path_join(self.tmp_test_folder, name)
@@ -114,6 +130,7 @@ class PytestPluginRunningTests(TestCase):
         mkdir(tests_dir)
         test_project.set_property('dir_source_pytest_python',
                                   'tests')
+        initialize_pytest_plugin(test_project)
         src_dir = path_join(project_dir, 'src')
         mkdir(src_dir)
         test_project.set_property('dir_source_main_python',
@@ -163,9 +180,6 @@ class PytestPluginRunningTests(TestCase):
     def test_should_correct_get_pytest_failure(self):
         test_project = self.create_test_project('pytest_failure', {'test_failure.py': pytest_file_failure})
         self.assertRaises(BuildFailedException, run_unit_tests, test_project, Mock())
-        # has to be compatible with Python 2.6
-        # with self.assertRaises(BuildFailedException) as context:
-        #     run_unit_tests(test_project, Mock())
 
     def test_should_run_pytest_tests_with_extra_args(self):
         test_project = self.create_test_project('pytest_sucess_with_extra_args',
