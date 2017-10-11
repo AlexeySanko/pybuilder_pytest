@@ -27,7 +27,7 @@ Coverage measure
 ----------------------------------
 
 For coverage measure is recommended to use pytest plugins.
-For example, `pytest-cov`.
+For example, [pytest-cov](http://pytest-cov.readthedocs.io/en/latest/index.html).
 
 ```python
 from pybuilder.utils import discover_modules
@@ -45,6 +45,11 @@ If You need to pass result to file You can use
 ```python
 project.get_property("pytest_extra_args").append("--cov-report=xml:target/reports/pytest_coverage.xml")
 ```
+
+For breaking build with coverage threshold use `--cov-fail-under` option.
+```python
+project.get_property("pytest_extra_args").append("--cov-fail-under=50")
+``` 
 
 If You use `pytest-cov` do not forget to disable PyBuilder `coverage` plugin, 
 for avoiding unexpected results or exception:
