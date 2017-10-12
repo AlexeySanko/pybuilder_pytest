@@ -26,32 +26,4 @@ This will break the build if any unittest failed.
 Coverage measure
 ----------------------------------
 
-For coverage measure is recommended to use pytest plugins.
-For example, [pytest-cov](http://pytest-cov.readthedocs.io/en/latest/index.html).
-
-```python
-from pybuilder.utils import discover_modules
-
-@init
-def set_properties(project, logger):
-    project.build_depends_on('pytest-cov')
-    
-    for module_name in discover_modules(project.expand_path("$dir_source_main_python")):
-        project.get_property("pytest_extra_args").append("--cov=" + module_name)
-    project.get_property("pytest_extra_args").append("--cov-report=term-missing")
-```
-
-If You need to pass result to file You can use 
-```python
-project.get_property("pytest_extra_args").append("--cov-report=xml:target/reports/pytest_coverage.xml")
-```
-
-For breaking build with coverage threshold use `--cov-fail-under` option.
-```python
-project.get_property("pytest_extra_args").append("--cov-fail-under=50")
-``` 
-
-If You use `pytest-cov` do not forget to disable PyBuilder `coverage` plugin, 
-for avoiding unexpected results or exception:
-
-~~use_plugin("python.coverage")~~
+For coverage measure is recommended to use [pybuilder_pytest_coverage](https://github.com/AlexeySanko/pybuilder_pytest_coverage)
