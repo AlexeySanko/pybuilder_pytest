@@ -25,10 +25,11 @@ use_plugin("python.frosted")
 use_plugin("python.coverage")
 use_plugin("python.distutils")
 use_plugin("python.unittest")
+use_plugin("python.unittest")
+use_plugin('pypi:pybuilder_semver_git_tag')
 
 
 name = "pybuilder-pytest"
-version = '1.1.0'
 authors = [Author('Alexey Sanko', 'alexeycount@gmail.com')]
 url = 'https://github.com/AlexeySanko/pybuilder_pytest'
 description = 'Please visit {0} for more information!'.format(url)
@@ -41,6 +42,7 @@ default_task = ['clean', 'analyze', 'publish']
 @init
 def set_properties(project):
     # dependencies
+    project.build_depends_on('mock')
     project.depends_on('pytest')
 
     # coverage
