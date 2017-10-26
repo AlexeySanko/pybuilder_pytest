@@ -30,4 +30,4 @@ Plugin has next properties with provided defaults
 | Name | Type | Default Value | Description |
 | --- | --- | --- | --- |
 | dir_source_pytest_python | string | src/unittest/python | Relative path to directory with unittest modules
-| pytest_extra_args | list | [] | extra arguments which will be passed to pytest |
+| pytest_extra_args | list | `[]` | Extra arguments which will be passed to pytest |
