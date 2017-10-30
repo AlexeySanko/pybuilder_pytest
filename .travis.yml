@@ -9,10 +9,31 @@ python:
 - 'pypy'
 - 'pypy3'
 branches:
-  only:
+  except:
   - master
 install:
   - pip install pybuilder
   - pyb install_dependencies --verbose
 script:
   - pyb --debug
+deploy:
+  - provider: pypi
+    user: AlexeySanko
+    server: https://upload.pypi.org/legacy/
+    password:
+      secure: lVkag3diPEa6zZTINSDGL2dansiK30mDepbnYaf9DeMuYxzYSMtm0rf1wLMJzw3XRMzQtUoYYhGVVmM/0eK3luIgMjXAix6uZtQLhOQ914LMDiLts3VYy+5q4TguS8R5t5CXa+dyZOw4Ol3x/0BrSNXmZS/ASN8kwmTv9lsCASIK3YeZmcZA3hnX/94Ya94QovbTXxuOIFIUhCoO9UL3PZxdS4RBIuLWRY58i10qbuHRMpAsmjAOgTLWwyo3wFTAgFHbCx5rZ5iWM5wsEGzOZZ4hY1G2j8ibd5vD+0S8VRS41N3ef3k4P96QhyC0SwE/VREt5i758DJ2oW2oVIPcjGh80COApCMDKgutsyrJcfwWUcNytSlG1rjE9fiS/U8MX7f/8K/BltsnsEWU8n9YPjCeyFUOrasD/xZl7trp9NVk9AuGrD/4ljfPyAs9hNs9Gkj52rgyDXo+RfseGYOVWh2BeHyahlqSMu2/JMKp47k1jTONRgvkwz+y2LsRTZmEiPvKih0UhBjI4wxkteXIGwJCmVsBXIZD0LG0TR/14kSbuI+ex5JRXv/c4+XLb2kNgp/sJ7RFWaQ6ml+TjZss8olHyFoeX6v/hmjaHLKiSS32n5nA6sa7R/z3XoiFPTINvAeR26cE6n3YDXbPRxGhRvo0yjLxawWdrY12YBzJkN4=
+    on:
+      tags: true
+      python: '2.7'
+      repo: AlexeySanko/pybuilder_pytest
+    distributions: bdist_wheel
+  - provider: pypi
+    user: AlexeySanko
+    server: https://upload.pypi.org/legacy/
+    password:
+      secure: lVkag3diPEa6zZTINSDGL2dansiK30mDepbnYaf9DeMuYxzYSMtm0rf1wLMJzw3XRMzQtUoYYhGVVmM/0eK3luIgMjXAix6uZtQLhOQ914LMDiLts3VYy+5q4TguS8R5t5CXa+dyZOw4Ol3x/0BrSNXmZS/ASN8kwmTv9lsCASIK3YeZmcZA3hnX/94Ya94QovbTXxuOIFIUhCoO9UL3PZxdS4RBIuLWRY58i10qbuHRMpAsmjAOgTLWwyo3wFTAgFHbCx5rZ5iWM5wsEGzOZZ4hY1G2j8ibd5vD+0S8VRS41N3ef3k4P96QhyC0SwE/VREt5i758DJ2oW2oVIPcjGh80COApCMDKgutsyrJcfwWUcNytSlG1rjE9fiS/U8MX7f/8K/BltsnsEWU8n9YPjCeyFUOrasD/xZl7trp9NVk9AuGrD/4ljfPyAs9hNs9Gkj52rgyDXo+RfseGYOVWh2BeHyahlqSMu2/JMKp47k1jTONRgvkwz+y2LsRTZmEiPvKih0UhBjI4wxkteXIGwJCmVsBXIZD0LG0TR/14kSbuI+ex5JRXv/c4+XLb2kNgp/sJ7RFWaQ6ml+TjZss8olHyFoeX6v/hmjaHLKiSS32n5nA6sa7R/z3XoiFPTINvAeR26cE6n3YDXbPRxGhRvo0yjLxawWdrY12YBzJkN4=
+    on:
+      tags: true
+      python: '3.6'
+      repo: AlexeySanko/pybuilder_pytest
+    distributions: bdist_wheel
