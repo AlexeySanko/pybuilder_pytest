@@ -23,10 +23,10 @@ from pybuilder.plugins.python.unittest_plugin \
         import _register_test_and_source_path_and_return_test_dir \
         as push_test_path_to_syspath
 
-from pybuilder_pytest.version import __version__
+from pybuilder_pytest import version
 
 __author__ = 'Alexey Sanko'
-__version__ = __version__
+__version__ = version.__version__
 
 use_plugin("python.core")
 
