@@ -25,10 +25,13 @@ use_plugin("python.frosted")
 use_plugin("python.coverage")
 use_plugin("python.distutils")
 use_plugin("python.unittest")
+use_plugin("filter_resources")
+# third-party plugins
+use_plugin('pypi:pybuilder_pylint_extended')
 use_plugin('pypi:pybuilder_semver_git_tag')
 
 
-name = "pybuilder-pytest"
+name = "pybuilder_pytest"
 authors = [Author('Alexey Sanko', 'alexeycount@gmail.com')]
 url = 'https://github.com/AlexeySanko/pybuilder_pytest'
 description = 'Please visit {0} for more information!'.format(url)
@@ -36,6 +39,15 @@ license = 'Apache License, Version 2.0'
 summary = 'PyBuilder Pytest Plugin'
 
 default_task = ['clean', 'analyze', 'publish']
+
+
+@init
+def filter_settings(project):
+    # filter target files
+    project.set_property('filter_resources_target', '$dir_dist')
+    # provide verions and other properties
+    project.get_property("filter_resources_glob").append(
+        "%s/version.py" % name)
 
 
 @init
@@ -56,7 +68,7 @@ def set_properties(project):
     project.set_property("frosted_include_test_sources", True)
 
     # distutils
-    project.set_property('distutils_commands', ['bdist', 'bdist_wheel'])
+    project.set_property('distutils_commands', ['bdist_wheel'])
     project.set_property('distutils_classifiers', [
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -69,4 +81,5 @@ def set_properties(project):
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5'])
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6'])
