@@ -124,22 +124,23 @@ class PytestPluginRunningTests(TestCase):
     """ Test run_unit_tests function"""
     def setUp(self):
         self.tmp_test_folder = mkdtemp()
-        self.project = Project("basedir")
+        self.project = Project("/basedir")
+        self.project.set_property("version", "1.0.0")
 
     @patch("pybuilder_pytest.pytest.main", return_value=None)
     def test_should_replace_placeholders_into_properties(self, main):  # pylint: disable=invalid-name
         """ Test that plugin correctly works with placeholders"""
         self.project.set_property("dir_source_pytest_python",
-                                  "src/unittest/${basedir}")
+                                  "src/unittest/${version}")
         self.project.set_property("pytest_extra_args",
-                                  ['some_command', '/path/${basedir}'])
+                                  ['some_command', '/path/${version}'])
         self.project.set_property("dir_source_main_python", '.')
         self.project.set_property("verbose", True)
         run_unit_tests(self.project, Mock())
         main.assert_called_with([
-            'basedir/src/unittest/basedir',
+            '/basedir/src/unittest/1.0.0',
             'some_command',
-            '/path/basedir',
+            '/path/1.0.0',
             '-s',
             '-v'
         ])
