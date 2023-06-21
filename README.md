@@ -1,7 +1,7 @@
 PyBuilder Pytest Plugin [![Build Status](https://travis-ci.org/AlexeySanko/pybuilder_pytest.svg?branch=master)](https://travis-ci.org/AlexeySanko/pybuilder_pytest)
 =======================
 
-Use pytest Python module for running unittests
+Use pytest Python module for running unittests and/or integration tests
 
 How to use pybuilder_pytest
 ----------------------------------
@@ -16,7 +16,7 @@ def init(project):
     project.get_property("pytest_integration_extra_args").append("-x")
 ```
 
-This will break the build if any unittest failed.
+This will break the build if any unittest/integrationtest failed.
 
 Coverage measure
 ----------------------------------
