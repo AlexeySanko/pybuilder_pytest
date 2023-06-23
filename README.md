@@ -1,7 +1,7 @@
 PyBuilder Pytest Plugin [![Build Status](https://travis-ci.org/AlexeySanko/pybuilder_pytest.svg?branch=master)](https://travis-ci.org/AlexeySanko/pybuilder_pytest)
 =======================
 
-Use pytest Python module for running unittests
+Use pytest Python module for running unittests and/or integration tests
 
 How to use pybuilder_pytest
 ----------------------------------
@@ -13,9 +13,10 @@ use_plugin('pypi:pybuilder_pytest')
 @init
 def init(project):
     project.get_property("pytest_extra_args").append("-x")
+    project.get_property("pytest_integration_extra_args").append("-x")
 ```
 
-This will break the build if any unittest failed.
+This will break the build if any unittest/integrationtest failed.
 
 Coverage measure
 ----------------------------------
@@ -27,7 +28,9 @@ Properties
 
 Plugin has next properties with provided defaults
 
-| Name | Type | Default Value | Description |
-| --- | --- | --- | --- |
-| dir_source_pytest_python | string | src/unittest/python | Relative path to directory with unittest modules
-| pytest_extra_args | list | `[]` | Extra arguments which will be passed to pytest |
+| Name                                 | Type | Default Value              | Description |
+|--------------------------------------| --- |----------------------------| --- |
+| dir_source_pytest_python             | string | src/unittest/python        | Relative path to directory with unittest modules
+| pytest_extra_args                    | list | `[]`                       | Extra arguments which will be passed to pytest |
+| dir_source_pytest_integration_python | string | src/integrationtest/python | Relative path to directory with integrationtest modules
+| pytest_integration_extra_args        | list | `[]`                       | Extra arguments which will be passed to pytest |
