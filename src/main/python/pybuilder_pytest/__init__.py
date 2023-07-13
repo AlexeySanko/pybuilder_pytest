@@ -14,6 +14,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 """ PyBuilder plugin which provides work with PyTest tool"""
+import os.path
 from sys import path as sys_path
 
 import pytest
@@ -74,6 +75,9 @@ def run_integration_tests(project, logger, reactor):
     test_dir = push_test_path_to_syspath(
         project, sys_path, 'pytest_integration'
     )
+    if not os.path.exists(test_dir):
+        logger.warn(f"pytest: No integration tests found in {test_dir}, skipping")
+        return
     # reports_dir = prepare_reports_directory(project)
     extra_args = [
         project.expand(prop)
