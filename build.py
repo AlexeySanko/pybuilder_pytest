@@ -28,7 +28,7 @@ use_plugin("python.unittest")
 use_plugin("filter_resources")
 # third-party plugins
 use_plugin('pypi:pybuilder_pylint_extended')
-use_plugin('pypi:pybuilder_semver_git_tag')
+use_plugin('pypi:pybuilder_scm_ver_plugin')
 
 
 name = "pybuilder_pytest"
