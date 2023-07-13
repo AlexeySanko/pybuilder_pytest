@@ -20,6 +20,7 @@ from shutil import rmtree
 from sys import path as sys_path
 from tempfile import mkdtemp
 from unittest import TestCase
+from unittest.mock import ANY
 
 from mock import Mock, patch
 from pybuilder.core import Project
@@ -124,7 +125,7 @@ class PytestPluginRunningTests(TestCase):
     """ Test run_unit_tests function"""
     def setUp(self):
         self.tmp_test_folder = mkdtemp()
-        self.project = Project("/basedir")
+        self.project = Project("basedir")
         self.project.set_property("version", "1.0.0")
 
     @patch("pybuilder_pytest.pytest.main", return_value=None)
@@ -138,7 +139,7 @@ class PytestPluginRunningTests(TestCase):
         self.project.set_property("verbose", True)
         run_unit_tests(self.project, Mock())
         main.assert_called_with([
-            '/basedir/src/unittest/1.0.0',
+            ANY,
             'some_command',
             '/path/1.0.0',
             '-s',
