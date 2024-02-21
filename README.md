@@ -1,7 +1,7 @@
 PyBuilder Pytest Plugin [![Build Status](https://travis-ci.org/AlexeySanko/pybuilder_pytest.svg?branch=master)](https://travis-ci.org/AlexeySanko/pybuilder_pytest)
 =======================
 
-Use pytest Python module for running unittests and/or integration tests
+Use `pytest` Python module for running unittests and/or integration tests. This module follows the naming convention of `pytest`: file names start with `test_` instead of ending with `_tests.py` as stated in the PyBuilder
 
 How to use pybuilder_pytest
 ----------------------------------
